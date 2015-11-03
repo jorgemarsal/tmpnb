@@ -1,0 +1,7 @@
+<div>
+	<p>
+		<em style="color:#999">on {{ format(item['created_time']) }}</em><br />
+        {{ item['message'] if 'message' in item else '#@#$' }}
+
+	</p>
+</div>
