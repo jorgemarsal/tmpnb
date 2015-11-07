@@ -1,0 +1,21 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "{{ podname }}"
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "{{ containername }}",
+        "image": "{{ containerimage }}",
+        "imagepullpolicy": "{{ imagepullpolicy }}",
+        "command": [
+          {{ command|join(', ') }}
+        ]
+      }
+    ],
+    "restartPolicy": "{{ restartpolicy }}"
+  }  
+
+}
