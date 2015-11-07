@@ -1,0 +1,32 @@
+{
+  "kind": "ReplicationController",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "{{ rcname }}",
+      "labels":{
+         "app":"{{ label }}"
+      }
+  },
+   "spec":{
+      "replicas": {{ replicas }},
+      "selector":{
+         "app":"{{ label }}"
+      },
+      "template":{
+         "metadata":{
+            "labels":{
+               "app": "{{ label }}"
+            }
+         },
+         "spec":{
+            "containers":[
+               {
+                  "name": "{{ containername }}",
+                  "image":"{{ containerimage }}"
+               }
+            ]
+         }
+      }
+   }
+
+}

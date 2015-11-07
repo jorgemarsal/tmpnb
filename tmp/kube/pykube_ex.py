@@ -41,6 +41,21 @@ class KubernetesApi(object):
         rsp = self.http_client.post(url='/pods', json=json_obj)
         if rsp.status_code != 201: raise KubernetesError
 
+    def start_replicationcontroller(self, *args, **kwargs):
+        filename = '{}/templates/rc.json'.format(os.path.dirname(__file__))
+        with open(filename) as f:
+            t = jinja2.Template(f.read())
+        json_str = t.render(
+            rcname=kwargs.get('rcname'),
+            containername=kwargs.get('containername'),
+            containerimage=kwargs.get('containerimage'),
+            label=kwargs.get('label'),
+            replicas=kwargs.get('replicas')
+        )
+        json_obj = json.loads(json_str)
+        rsp = self.http_client.post(url='/replicationcontrollers', json=json_obj)
+        if rsp.status_code != 201: raise KubernetesError
+
 
     def _get_components(self, component_type):
         rsp = self.http_client.get(url='/{}'.format(component_type))
@@ -80,12 +95,19 @@ for item in k.get_replication_controllers():
 for item in k.get_services():
     print(item)
 
-k.start_pod(podname='busybox',
+# k.start_pod(podname='busybox',
+#             containername='busybox',
+#             containerimage='busybox',
+#             imagepullpolicy='IfNotPresent',
+#             restartpolicy='Always',
+#             command=['"sleep"', '"3600"']
+# )
+
+k.start_replicationcontroller(rcname='example',
             containername='busybox',
             containerimage='busybox',
-            imagepullpolicy='IfNotPresent',
-            restartpolicy='Always',
-            command=['"sleep"', '"3600"']
+            label='example',
+            replicas=1
 )
 
 
